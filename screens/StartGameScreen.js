@@ -1,22 +1,35 @@
 import React, { useState } from 'react'
-import { View, TextInput, Text, Button, StyleSheet } from 'react-native';
+import { View, Text, Button, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import Card from '../components/Card'
 import Colors from '../constants/colors'
+import Input from '../components/input'
 
 const StartGameScreen = () => {
-    const [inputValue, setInputValue] = useState('Input here');
+    const [enteredValue, setEnteredValue] = useState('');
+
+    const numberInputHandler = (number) => {
+        setEnteredValue(number.replace(/[^0-9]/g, ''))
+    }
     return (
-        <>
+        <TouchableWithoutFeedback onPress={() => {
+            Keyboard.dismiss()
+        } }>
             <View style={styles.screen}>
                 <Text
                     style={styles.title}>Start a New Game
                 </Text>
                 <Card style={styles.inputContainer}>
                     <Text>Select a Number</Text>
-                    <TextInput
+                    {/* <TextInput
                         style={styles.textInput}
                         onChangeText={(text) => setInputValue(text)}
                         value={inputValue}
+                    /> */}
+                    <Input
+                        onChangeText={numberInputHandler}
+                        style={styles.input}
+                        autoCapitalize={false}
+                        value={enteredValue}
                     />
                     <View style={styles.buttonContainer}>
                         <View
@@ -36,10 +49,10 @@ const StartGameScreen = () => {
                         </View>
                     </View>
                 </Card>
+                <Text>{enteredValue}</Text>
 
             </View>
-            <Text>{inputValue}</Text>
-        </>
+        </TouchableWithoutFeedback>
     )
 }
 
@@ -61,8 +74,10 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         alignItems: 'center',
     },
-    textInput: {
-        fontSize: 15
+    input: {
+        fontSize: 15,
+        width: 50,
+        textAlign: 'center'
     },
     buttonContainer: {
         flexDirection: 'row',
